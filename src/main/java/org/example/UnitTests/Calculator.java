@@ -1,0 +1,21 @@
+package org.example.UnitTests;
+
+public class Calculator {
+
+    public int getSum(int x, int y) {
+        return x+y;
+    }
+
+    public int getDivide(int x, int y) {
+        return x/y;
+    }
+
+    public int getMultiple(int x, int y) {
+        return x*y;
+    }
+
+    public int getSubstraction (int x, int y) {
+        return x-y;
+    }
+
+}
