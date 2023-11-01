@@ -24,6 +24,6 @@ public class GameProgress implements Serializable {
                 ", weapons=" + weapons +
                 ", lvl=" + lvl +
                 ", distance=" + distance +
-                '}';
+                "}";
     }
 }

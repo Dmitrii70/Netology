@@ -54,6 +54,7 @@ public class Main {
         String nameJSON1 = "data.json";
         String nameJSON2 = "data2.json";
         writeString(json, nameJSON1);
+
         createXML();
         List<Employee> listFromXML = parseXML("data.xml");
         String jsonFromXML = listToJson(listFromXML);
