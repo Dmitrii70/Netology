@@ -28,6 +28,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -67,110 +68,116 @@ public class Main {
         Document doc = builder.parse(new File(nameXML));
         Node root = doc.getDocumentElement();
         System.out.println("Корневой элемент: " + root.getNodeName());
-        List <Employee> employeeList = read(root);
-        return null;
+              return read(root);
     }
-        private static List <Employee> read (Node node){
-            List <Employee> employeeList = null;
-            NodeList nodeList = node.getChildNodes();
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node_ = nodeList.item(i);
-                if (Node.ELEMENT_NODE == node_.getNodeType()) {
-                    System.out.println("Текущий узел: " + node_.getNodeName());
-                    Element employee = (Element) node_;
-                    NamedNodeMap map = employee.getAttributes();
-                    for (int a = 0; a < map.getLength(); a++) {
-                        String attrName = map.item(a).getNodeName();
-                        String attrValue = map.item(a).getNodeValue();
-                        System.out.println("Аттрибут: " + attrName + "; значение: " + attrValue);
+
+    private static List<Employee> read(Node root) {
+        List<Employee> employeeList = new ArrayList<>();
+        NodeList nodeList = root.getChildNodes();
+        Employee currentEmployee;
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            currentEmployee = new Employee();
+
+            currentEmployee.setAge(Integer.parseInt(nodeList.item(i)
+                    .getChildNodes().item(4).getFirstChild().getTextContent()));
+
+            currentEmployee.setId(Integer.parseInt(nodeList.item(i)
+                    .getChildNodes().item(0).getFirstChild().getTextContent()));
+
+            currentEmployee.setCountry(nodeList.item(i)
+                    .getChildNodes().item(3).getFirstChild().getTextContent());
+
+            currentEmployee.setFirstName(nodeList.item(i)
+                    .getChildNodes().item(1).getFirstChild().getTextContent());
+
+            currentEmployee.setLastName(nodeList.item(i)
+                    .getChildNodes().item(2).getFirstChild().getTextContent());
+
+            employeeList.add(currentEmployee);
                     }
-                    employee.getElementsByTagName("lastName").item(0).getTextContent();
-                    read(node_);
-                }
-            }
-            return employeeList;
-        }
-
-        private static void createXML () throws ParserConfigurationException, TransformerException {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.newDocument();
-
-            Element staff = document.createElement("staff");
-            document.appendChild(staff);
-            Element employee1 = document.createElement("employee");
-            staff.appendChild(employee1);
-            Element id1 = document.createElement("id");
-            employee1.appendChild(id1);
-            id1.appendChild(document.createTextNode("1"));
-            Element firstName1 = document.createElement("firstName");
-            employee1.appendChild(firstName1);
-            firstName1.appendChild(document.createTextNode("John"));
-            Element lastName1 = document.createElement("lastName");
-            employee1.appendChild(lastName1);
-            lastName1.appendChild(document.createTextNode("Smith"));
-            Element country1 = document.createElement("country");
-            employee1.appendChild(country1);
-            country1.appendChild(document.createTextNode("USA"));
-            Element age1 = document.createElement("age");
-            employee1.appendChild(age1);
-            age1.appendChild(document.createTextNode("25"));
-
-            Element employee2 = document.createElement("employee");
-            staff.appendChild(employee2);
-            Element id2 = document.createElement("id");
-            employee2.appendChild(id2);
-            id2.appendChild(document.createTextNode("2"));
-            Element firstName2 = document.createElement("firstName");
-            employee2.appendChild(firstName2);
-            firstName2.appendChild(document.createTextNode("Ivan"));
-            Element lastName2 = document.createElement("lastName");
-            employee2.appendChild(lastName2);
-            lastName2.appendChild(document.createTextNode("Petrov"));
-            Element country2 = document.createElement("country");
-            employee2.appendChild(country2);
-            country2.appendChild(document.createTextNode("RU"));
-            Element age2 = document.createElement("age");
-            employee2.appendChild(age2);
-            age2.appendChild(document.createTextNode("23"));
-
-            DOMSource domSource = new DOMSource(document);
-            StreamResult streamResult = new StreamResult(new File("data.xml"));
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.transform(domSource, streamResult);
-        }
-
-        private static void writeString (String json, String nameOfFile){
-            try (FileWriter file = new FileWriter(nameOfFile)) {
-                file.write(json);
-                file.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private static String listToJson (List < Employee > list) {
-            GsonBuilder builder = new GsonBuilder();
-            Gson gson = builder.create();
-            Type listType = new TypeToken<List<Employee>>() {
-            }.getType();
-            String json = gson.toJson(list, listType);
-            return json;
-        }
-
-        private static List<Employee> parseCSV (String[]columnMapping, String fileName){
-            List<Employee> data = null;
-            try (CSVReader reader = new CSVReader(new FileReader(fileName))) {
-                ColumnPositionMappingStrategy<Employee> strategy = new ColumnPositionMappingStrategy<>();
-                strategy.setType(Employee.class);
-                strategy.setColumnMapping(columnMapping);
-                CsvToBean<Employee> csv = new CsvToBeanBuilder<Employee>(reader).withMappingStrategy(strategy).build();
-                data = csv.parse();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return data;
-        }
-
+        return employeeList;
     }
+
+    private static void createXML() throws ParserConfigurationException, TransformerException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document document = builder.newDocument();
+
+        Element staff = document.createElement("staff");
+        document.appendChild(staff);
+        Element employee1 = document.createElement("employee");
+        staff.appendChild(employee1);
+        Element id1 = document.createElement("id");
+        employee1.appendChild(id1);
+        id1.appendChild(document.createTextNode("1"));
+        Element firstName1 = document.createElement("firstName");
+        employee1.appendChild(firstName1);
+        firstName1.appendChild(document.createTextNode("John"));
+        Element lastName1 = document.createElement("lastName");
+        employee1.appendChild(lastName1);
+        lastName1.appendChild(document.createTextNode("Smith"));
+        Element country1 = document.createElement("country");
+        employee1.appendChild(country1);
+        country1.appendChild(document.createTextNode("USA"));
+        Element age1 = document.createElement("age");
+        employee1.appendChild(age1);
+        age1.appendChild(document.createTextNode("25"));
+
+        Element employee2 = document.createElement("employee");
+        staff.appendChild(employee2);
+        Element id2 = document.createElement("id");
+        employee2.appendChild(id2);
+        id2.appendChild(document.createTextNode("2"));
+        Element firstName2 = document.createElement("firstName");
+        employee2.appendChild(firstName2);
+        firstName2.appendChild(document.createTextNode("Ivan"));
+        Element lastName2 = document.createElement("lastName");
+        employee2.appendChild(lastName2);
+        lastName2.appendChild(document.createTextNode("Petrov"));
+        Element country2 = document.createElement("country");
+        employee2.appendChild(country2);
+        country2.appendChild(document.createTextNode("RU"));
+        Element age2 = document.createElement("age");
+        employee2.appendChild(age2);
+        age2.appendChild(document.createTextNode("23"));
+
+        DOMSource domSource = new DOMSource(document);
+        StreamResult streamResult = new StreamResult(new File("data.xml"));
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.transform(domSource, streamResult);
+    }
+
+    private static void writeString(String json, String nameOfFile) {
+        try (FileWriter file = new FileWriter(nameOfFile)) {
+            file.write(json);
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String listToJson(List<Employee> list) {
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        Type listType = new TypeToken<List<Employee>>() {
+        }.getType();
+        String json = gson.toJson(list, listType);
+        return json;
+    }
+
+    private static List<Employee> parseCSV(String[] columnMapping, String fileName) {
+        List<Employee> data = null;
+        try (CSVReader reader = new CSVReader(new FileReader(fileName))) {
+            ColumnPositionMappingStrategy<Employee> strategy = new ColumnPositionMappingStrategy<>();
+            strategy.setType(Employee.class);
+            strategy.setColumnMapping(columnMapping);
+            CsvToBean<Employee> csv = new CsvToBeanBuilder<Employee>(reader).withMappingStrategy(strategy).build();
+            data = csv.parse();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+}
