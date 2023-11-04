@@ -1,4 +1,4 @@
-package org.example.CSVJSONXML;
+package org.example.csvJSONXML;
 
 public class Employee {
     public long id;

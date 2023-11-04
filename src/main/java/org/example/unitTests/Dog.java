@@ -1,4 +1,4 @@
-package org.example.UnitTests;
+package org.example.unitTests;
 
 public class Dog {
     private String name;

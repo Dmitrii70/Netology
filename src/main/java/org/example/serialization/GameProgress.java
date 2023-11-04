@@ -1,4 +1,4 @@
-package org.example.Serialization;
+package org.example.serialization;
 
 import java.io.Serializable;
 

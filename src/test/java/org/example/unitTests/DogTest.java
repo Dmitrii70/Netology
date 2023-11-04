@@ -1,4 +1,4 @@
-package org.example.UnitTests;
+package org.example.unitTests;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,14 +14,6 @@ class DogTest {
 
     @Test
     void testGetAge() {
-        assertEquals(7,dog.getAge());
-    }
-
-    @Test
-    void setName() {
-    }
-
-    @Test
-    void setAge() {
+        assertEquals(7, dog.getAge());
     }
 }
